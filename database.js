@@ -5,7 +5,7 @@ const fs = require('fs');
 const isVercel = process.env.VERCEL === '1';
 let dbPath = 'pingpong.db';
 
-if (isVercel) {
+if (true) {
     const tmpDbPath = path.join('/tmp', 'pingpong.db');
     // If the DB doesn't exist in /tmp, copy it from source or create new
     if (!fs.existsSync(tmpDbPath)) {
