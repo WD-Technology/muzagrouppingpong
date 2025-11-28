@@ -187,6 +187,8 @@ function openMatchModal(match) {
     // Update UI Names
     document.getElementById('p1-name-display').textContent = match.p1_name;
     document.getElementById('p2-name-display').textContent = match.p2_name;
+    document.getElementById('p1-side-name').textContent = match.p1_name;
+    document.getElementById('p2-side-name').textContent = match.p2_name;
 
     // Reset UI Elements
     document.getElementById('p1-point-btn').disabled = false;
