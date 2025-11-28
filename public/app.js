@@ -251,10 +251,8 @@ function updateScorerUI() {
             // Next Set
             saveState(); // Save before next set
             setTimeout(async () => {
-                const confirmed = await showConfirm("Start next set? Switch sides!");
-                if (confirmed) {
-                    startNextSet();
-                }
+                await showAlert("Set finished! Starting next set. Switch sides!");
+                startNextSet();
             }, 500);
         }
     }
@@ -424,12 +422,29 @@ function showConfirm(message) {
 }
 
 function showAlert(message) {
-    // For now, we can reuse showConfirm but hide Cancel, or just use alert for simple errors.
-    // Let's make a simple alert using the same modal for consistency if needed, 
-    // but for "Foda" UX, maybe just a toast? 
-    // User asked for "modais de confirmação", so let's stick to that.
-    // We'll use showConfirm for "Are you sure?" scenarios.
-    alert(message); // Keep simple alerts for errors for now, or upgrade later.
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirm-modal');
+        const msgEl = document.getElementById('confirm-message');
+        const okBtn = document.getElementById('confirm-ok-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
+
+        msgEl.textContent = message;
+        cancelBtn.style.display = 'none'; // Hide cancel button
+        modal.classList.remove('hidden');
+
+        const cleanup = () => {
+            okBtn.removeEventListener('click', onConfirm);
+            cancelBtn.style.display = ''; // Restore cancel button
+            modal.classList.add('hidden');
+        };
+
+        const onConfirm = () => {
+            cleanup();
+            resolve(true);
+        };
+
+        okBtn.addEventListener('click', onConfirm);
+    });
 }
 
 // --- Event Listeners ---
