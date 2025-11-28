@@ -1,5 +1,26 @@
 const Database = require('better-sqlite3');
-const db = new Database('pingpong.db', { verbose: console.log });
+const path = require('path');
+const fs = require('fs');
+
+const isVercel = process.env.VERCEL === '1';
+let dbPath = 'pingpong.db';
+
+if (isVercel) {
+    const tmpDbPath = path.join('/tmp', 'pingpong.db');
+    // If the DB doesn't exist in /tmp, copy it from source or create new
+    if (!fs.existsSync(tmpDbPath)) {
+        const sourceDbPath = path.join(__dirname, 'pingpong.db');
+        if (fs.existsSync(sourceDbPath)) {
+            fs.copyFileSync(sourceDbPath, tmpDbPath);
+            console.log('Copied database to /tmp');
+        } else {
+            console.log('No source database found, creating new one in /tmp');
+        }
+    }
+    dbPath = tmpDbPath;
+}
+
+const db = new Database(dbPath, { verbose: console.log });
 
 // Create tables
 const createTables = () => {

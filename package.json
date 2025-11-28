@@ -12,5 +12,8 @@
   "dependencies": {
     "better-sqlite3": "^12.4.6",
     "express": "^5.1.0"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
